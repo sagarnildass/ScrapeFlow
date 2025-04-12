@@ -8,6 +8,7 @@ import {
 } from "@/schema/workflow";
 import { WorkflowStatus } from "@/types/workflow";
 import { revalidatePath } from "next/cache";
+import { waitFor } from "../helper/waitFor";
 
 export async function GetWorkflowsForUser() {
   const { userId } = await auth();
@@ -25,14 +26,14 @@ export async function GetWorkflowsForUser() {
 }
 
 export async function CreateWorkflow(form: createWorkflowSchemaType) {
-  const { success, data } = createWorkflowSchema.safeParse(form);
-  if (!success) {
-    throw new Error("Invalid form data");
-  }
-
   const { userId } = await auth();
   if (!userId) {
     throw new Error("User not authenticated");
+  }
+
+  const { success, data } = createWorkflowSchema.safeParse(form);
+  if (!success) {
+    throw new Error("Invalid form data");
   }
 
   const result = await prisma.workflow.create({
@@ -49,6 +50,41 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
   }
 
   return result; // Return the result instead of redirecting
+}
+
+export async function UpdateWorkflow({
+  id,
+  definition,
+}: {
+  id: string;
+  definition: string;
+}) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const workflow = await prisma.workflow.findUnique({
+    where: {
+      id,
+      userId,
+    },
+  });
+
+  if (!workflow) {
+    throw new Error("Workflow not found");
+  }
+
+  if (workflow.status !== WorkflowStatus.DRAFT) {
+    throw new Error("Workflow is not in draft mode");
+  }
+
+  await prisma.workflow.update({
+    data: {
+      definition,
+    },
+    where: { id, userId },
+  });
 }
 
 export async function DeleteWorkflow(workflowId: string) {
