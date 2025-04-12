@@ -3,7 +3,7 @@ import { CodeIcon, LucideProps } from "lucide-react";
 
 export const PageToHtmlTask = {
   type: TaskType.PAGE_TO_HTML,
-  label: "Get HTML from page",
+  label: "Get Html from page",
   icon: (props: LucideProps) => (
     <CodeIcon className="stroke-rose-400" {...props} />
   ),
@@ -17,7 +17,7 @@ export const PageToHtmlTask = {
   ],
   outputs: [
     {
-      name: "HTML",
+      name: "Html",
       type: TaskParamType.STRING,
     },
     {
