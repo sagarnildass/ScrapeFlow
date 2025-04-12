@@ -8,7 +8,10 @@ import {
 } from "@/schema/workflow";
 import { WorkflowStatus } from "@/types/workflow";
 import { revalidatePath } from "next/cache";
-import { waitFor } from "../helper/waitFor";
+import { AppNode } from "@/types/appNode";
+import { Edge } from "@xyflow/react";
+import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
+import { TaskType } from "@/types/task";
 
 export async function GetWorkflowsForUser() {
   const { userId } = await auth();
@@ -26,21 +29,29 @@ export async function GetWorkflowsForUser() {
 }
 
 export async function CreateWorkflow(form: createWorkflowSchemaType) {
-  const { userId } = await auth();
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
   const { success, data } = createWorkflowSchema.safeParse(form);
   if (!success) {
     throw new Error("Invalid form data");
   }
 
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const initialFlow: { nodes: AppNode[]; edges: Edge[] } = {
+    nodes: [],
+    edges: [],
+  };
+
+  // Let's add the flow entry point
+  initialFlow.nodes.push(CreateFlowNode(TaskType.LAUNCH_BROWSER));
+
   const result = await prisma.workflow.create({
     data: {
       userId,
       status: WorkflowStatus.DRAFT,
-      definition: "TODO",
+      definition: JSON.stringify(initialFlow),
       ...data,
     },
   });
@@ -85,6 +96,8 @@ export async function UpdateWorkflow({
     },
     where: { id, userId },
   });
+
+  revalidatePath("/workflows");
 }
 
 export async function DeleteWorkflow(workflowId: string) {
