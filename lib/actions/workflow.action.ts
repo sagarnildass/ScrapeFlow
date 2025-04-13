@@ -200,4 +200,6 @@ export async function RunWorkflow(form: {
   if (!execution) {
     throw new Error("Failed to create workflow execution");
   }
+  
+  return { executionId: execution.id };
 }
