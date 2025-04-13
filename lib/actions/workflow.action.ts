@@ -6,13 +6,20 @@ import {
   createWorkflowSchema,
   createWorkflowSchemaType,
 } from "@/schema/workflow";
-import { WorkflowExecutionPlan, WorkflowStatus } from "@/types/workflow";
+import {
+  WorkflowExecutionPlan,
+  WorkflowStatus,
+  WorkflowExecutionStatus,
+  ExecutionPhaseStatus,
+  WorkflowExecutionTrigger,
+} from "@/types/workflow";
 import { revalidatePath } from "next/cache";
 import { AppNode } from "@/types/appNode";
 import { Edge } from "@xyflow/react";
 import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/types/task";
 import { FlowToExecutionPlan } from "../workflow/executionPlan";
+import { TaskRegistry } from "../workflow/task/registry";
 
 export async function GetWorkflowsForUser() {
   const { userId } = await auth();
@@ -136,7 +143,7 @@ export async function RunWorkflow(form: {
     where: {
       userId,
       id: workflowId,
-    }
+    },
   });
 
   if (!workflow) {
@@ -155,13 +162,42 @@ export async function RunWorkflow(form: {
   if (result.error) {
     throw new Error("Invalid flow definition");
   }
-  
+
   if (!result.executionPlan) {
-    throw new Error("No execution plan generated")
+    throw new Error("No execution plan generated");
   }
 
   // eslint-disable-next-line prefer-const
   executionPlan = result.executionPlan;
 
-  console.log("Execution plan", executionPlan);
+  const execution = await prisma.workflowExecution.create({
+    data: {
+      workflowId,
+      userId,
+      status: WorkflowExecutionStatus.PENDING,
+      startedAt: new Date(),
+      trigger: WorkflowExecutionTrigger.MANUAL,
+      phases: {
+        create: executionPlan.flatMap((phase) => {
+          return phase.nodes.flatMap((node) => {
+            return {
+              userId,
+              status: ExecutionPhaseStatus.CREATED,
+              number: phase.phase,
+              node: JSON.stringify(node),
+              name: TaskRegistry[node.data.type].label,
+            };
+          });
+        }),
+      },
+    },
+    select: {
+      id: true,
+      phases: true,
+    },
+  });
+
+  if (!execution) {
+    throw new Error("Failed to create workflow execution");
+  }
 }
