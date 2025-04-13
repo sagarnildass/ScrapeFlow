@@ -1,12 +1,22 @@
-import React from 'react'
+import Topbar from "@/app/workflow/_components/topbar/Topbar";
+import React from "react";
 
-function ExecutionViewerPage({ params }: { params: { workflowId: string, executionId: string } }) {
-
+async function ExecutionViewerPage({
+  params,
+}: {
+  params: { workflowId: string; executionId: string };
+}) {
+  const { workflowId, executionId } = await params;
   return (
-    <div>
-      Run Viewer {params.executionId}
+    <div className="flex flex-col h-screen w-full overflow-hidden">
+      <Topbar
+        title="Workflow run details"
+        workflowId={workflowId}
+        subtitle={`Run ID: ${executionId}`}
+        hideButtons={true}
+      />
     </div>
-  )
+  );
 }
 
-export default ExecutionViewerPage
+export default ExecutionViewerPage;
