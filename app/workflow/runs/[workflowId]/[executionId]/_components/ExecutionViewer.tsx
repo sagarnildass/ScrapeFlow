@@ -1,6 +1,6 @@
 "use client";
 
-import { GetWorkflowExecutionWithPhases } from "@/lib/actions/workflow.action";
+import { GetWorkflowExecutionWithPhases, GetWorkflowPhaseDetails } from "@/lib/actions/workflow.action";
 import { WorkflowExecutionStatus } from "@/types/workflow";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -8,18 +8,22 @@ import {
   CircleDashedIcon,
   ClockIcon,
   CoinsIcon,
+  Loader2Icon,
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DatesToDurationString } from "@/lib/helper/dates";
+import { GetPhasesTotalCost } from "@/lib/helper/phases";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
 function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
+  const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const query = useQuery({
     queryKey: ["execution", initialData?.id],
     initialData,
@@ -28,7 +32,20 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
       q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
   });
 
-  const duration = DatesToDurationString(query.data?.completedAt, query.data?.startedAt);
+  const phaseDetails = useQuery({
+    queryKey: ["phaseDetails", selectedPhase],
+    enabled: selectedPhase !== null,
+    queryFn: () => GetWorkflowPhaseDetails(selectedPhase!),
+  })
+
+  const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
+
+  const duration = DatesToDurationString(
+    query.data?.completedAt,
+    query.data?.startedAt
+  );
+
+  const creditsConsumed = GetPhasesTotalCost(query.data?.phases || []);
 
   return (
     <div className="flex w-full h-full">
@@ -54,11 +71,22 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
             }
           />
 
-          <ExecutionLabel icon={ClockIcon} label="Duration" value={"TODO"} />
+          <ExecutionLabel
+            icon={ClockIcon}
+            label="Duration"
+            value={
+              duration ? (
+                duration
+              ) : (
+                <Loader2Icon className="animate-spin" size={20} />
+              )
+            }
+          />
+
           <ExecutionLabel
             icon={CoinsIcon}
             label="Credits consumed"
-            value={"TODO"}
+            value={creditsConsumed}
           />
         </div>
 
@@ -77,17 +105,27 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           {query.data?.phases.map((phase, index) => (
             <Button
               key={phase.id}
-              className="w-full justify-between"
-              variant={"ghost"}
+              className="w-full justify-between cursor-pointer"
+              variant={selectedPhase === phase.id ? "secondary" : "ghost"}
+              onClick={() => {
+                if (isRunning) return;
+                setSelectedPhase(phase.id);
+              }}
             >
               <div className="flex items-center gap-2">
                 <Badge variant="outline">{index + 1}</Badge>
                 <p className="font-semibold">{phase.name}</p>
               </div>
+              <p className="text-xs text-muted-foreground">
+                {phase.status}
+              </p>
             </Button>
           ))}
         </div>
       </aside>
+      <div className="flex w-full h-full">
+        <pre>{JSON.stringify(phaseDetails.data, null, 4)}</pre>
+      </div>
     </div>
   );
 }

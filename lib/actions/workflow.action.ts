@@ -20,6 +20,7 @@ import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/types/task";
 import { FlowToExecutionPlan } from "../workflow/executionPlan";
 import { TaskRegistry } from "../workflow/task/registry";
+import { ExecuteWorkflow } from "../workflow/executeWorkflow";
 
 export async function GetWorkflowsForUser() {
   const { userId } = await auth();
@@ -52,6 +53,22 @@ export async function GetWorkflowExecutionWithPhases(executionId: string) {
         orderBy: {
           number: "asc",
         },
+      },
+    },
+  });
+}
+
+export async function GetWorkflowPhaseDetails(phaseId: string) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  return prisma.executionPhase.findUnique({
+    where: {
+      id: phaseId,
+      execution: {
+        userId,
       },
     },
   });
@@ -221,6 +238,8 @@ export async function RunWorkflow(form: {
   if (!execution) {
     throw new Error("Failed to create workflow execution");
   }
-
+  
+  ExecuteWorkflow(execution.id);
   return { executionId: execution.id };
 }
+
