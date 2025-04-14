@@ -8,15 +8,17 @@ import { ChevronLeftIcon } from "lucide-react";
 import SaveBtn from "./SaveBtn";
 import ExecuteBtn from "./ExecuteBtn";
 import NavigationTabs from "./NavigationTabs";
+import PublishBtn from "./PublishBtn";
 
 interface Props {
   title: string;
   subtitle?: string;
   workflowId: string;
   hideButtons?: boolean;
+  isPublished?: boolean;
 }
 
-function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
+function Topbar({ title, subtitle, workflowId, hideButtons = false, isPublished = false }: Props) {
   const router = useRouter();
 
   return (
@@ -41,7 +43,12 @@ function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
         {hideButtons === false && (
           <>
             <ExecuteBtn workflowId={workflowId} />
-            <SaveBtn workflowId={workflowId} />
+            {!isPublished && (
+              <>
+                <SaveBtn workflowId={workflowId} />
+                <PublishBtn workflowId={workflowId} />
+              </>
+            )}
           </>
         )}
       </div>

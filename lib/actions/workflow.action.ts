@@ -21,6 +21,7 @@ import { TaskType } from "@/types/task";
 import { FlowToExecutionPlan } from "../workflow/executionPlan";
 import { TaskRegistry } from "../workflow/task/registry";
 import { ExecuteWorkflow } from "../workflow/executeWorkflow";
+import { CalculateWorkflowCost } from "../workflow/helpers";
 
 export async function GetWorkflowsForUser() {
   const { userId } = await auth();
@@ -214,23 +215,30 @@ export async function RunWorkflow(form: {
 
   let executionPlan: WorkflowExecutionPlan;
 
-  if (!flowDefinition) {
-    throw new Error("Flow definition is required");
+  if (workflow.status === WorkflowStatus.PUBLISHED) {
+    if (!workflow.executionPlan) {
+      throw new Error("No execution plan found for published workflow");
+    }
+    executionPlan = JSON.parse(workflow.executionPlan);
+  } else {
+    // workflow is in draft mode
+    if (!flowDefinition) {
+      throw new Error("Flow definition is required");
+    }
+
+    const flow = JSON.parse(flowDefinition);
+    const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+
+    if (result.error) {
+      throw new Error("Invalid flow definition");
+    }
+
+    if (!result.executionPlan) {
+      throw new Error("No execution plan generated");
+    }
+
+    executionPlan = result.executionPlan;
   }
-
-  const flow = JSON.parse(flowDefinition);
-  const result = FlowToExecutionPlan(flow.nodes, flow.edges);
-
-  if (result.error) {
-    throw new Error("Invalid flow definition");
-  }
-
-  if (!result.executionPlan) {
-    throw new Error("No execution plan generated");
-  }
-
-  // eslint-disable-next-line prefer-const
-  executionPlan = result.executionPlan;
 
   const execution = await prisma.workflowExecution.create({
     data: {
@@ -266,4 +274,64 @@ export async function RunWorkflow(form: {
 
   ExecuteWorkflow(execution.id);
   return { executionId: execution.id };
+}
+
+export async function PublishWorkflow(form: {
+  workflowId: string;
+  flowDefinition?: string;
+}) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const { workflowId, flowDefinition } = form;
+
+  const workflow = await prisma.workflow.findUnique({
+    where: {
+      id: workflowId,
+      userId,
+    },
+  });
+
+  if (!workflow) {
+    throw new Error("Workflow not found");
+  }
+
+  if (workflow.status !== WorkflowStatus.DRAFT) {
+    throw new Error("Workflow is not in draft mode");
+  }
+
+  if (!flowDefinition) {
+    throw new Error("Flow definition is required");
+  }
+
+  const flow = JSON.parse(flowDefinition);
+
+  const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+
+  if (result.error) {
+    throw new Error("Invalid flow definition");
+  }
+
+  if (!result.executionPlan) {
+    throw new Error("No execution plan generated");
+  }
+
+  const creditsCost = CalculateWorkflowCost(flow.nodes);
+
+  await prisma.workflow.update({
+    where: {
+      id: workflowId,
+      userId,
+    },
+    data: {
+      definition: flowDefinition,
+      executionPlan: JSON.stringify(result.executionPlan),
+      creditsCost,
+      status: WorkflowStatus.PUBLISHED,
+    },
+  });
+
+  revalidatePath(`/workflow/editor/${workflowId}`);
 }
