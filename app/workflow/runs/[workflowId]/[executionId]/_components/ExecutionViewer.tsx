@@ -99,7 +99,12 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           <ExecutionLabel
             icon={CircleDashedIcon}
             label="Status"
-            value={query.data?.status}
+            value={
+              <div className="font-semibold capitalize flex items-center gap-2">
+                <PhaseStatusBadge status={query.data?.status as ExecutionPhaseStatus} />
+                <span>{query.data?.status}</span>
+              </div>
+            }
           />
 
           <ExecutionLabel

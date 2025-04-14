@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
