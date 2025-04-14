@@ -21,14 +21,14 @@ export async function ExtractTextFromElementExecutor(
     const element = $(selector);
 
     if (!element) {
-      environment.log.error(`Element with selector ${selector} not found`);
+      environment.log.error("Element not found");
       return false;
     }
 
     const extractedText = $.text(element);
 
     if (!extractedText) {
-      environment.log.error(`Element has no text with selector ${selector}`);
+      environment.log.error("Element has no text");
       return false;
     }
 
