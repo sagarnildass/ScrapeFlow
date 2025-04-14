@@ -22,6 +22,7 @@ import { FlowToExecutionPlan } from "../workflow/executionPlan";
 import { TaskRegistry } from "../workflow/task/registry";
 import { ExecuteWorkflow } from "../workflow/executeWorkflow";
 import { CalculateWorkflowCost } from "../workflow/helpers";
+import { CronExpressionParser } from "cron-parser";
 
 export async function GetWorkflowsForUser() {
   const { userId } = await auth();
@@ -171,6 +172,39 @@ export async function UpdateWorkflow({
   revalidatePath("/workflows");
 }
 
+export async function UpdateWorkflowCron({
+  id,
+  cron,
+}: {
+  id: string;
+  cron: string;
+}) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    const interval = CronExpressionParser.parse(cron, {
+      tz: "UTC", // Explicitly set timezone to UTC
+      currentDate: new Date(), // Start from current time
+    });
+
+    await prisma.workflow.update({
+      where: { id, userId },
+      data: {
+        cron,
+        nextRunAt: interval.next().toDate(),
+      },
+    });
+  } catch (error) {
+    console.error("invalid cron expression", error);
+    throw new Error("Invalid cron expression");
+  }
+
+  revalidatePath("/workflows");
+}
+
 export async function DeleteWorkflow(workflowId: string) {
   const { userId } = await auth();
   if (!userId) {
@@ -214,7 +248,7 @@ export async function RunWorkflow(form: {
   }
 
   let executionPlan: WorkflowExecutionPlan;
-  let workflowDefinition = flowDefinition
+  let workflowDefinition = flowDefinition;
 
   if (workflow.status === WorkflowStatus.PUBLISHED) {
     if (!workflow.executionPlan) {
@@ -338,9 +372,7 @@ export async function PublishWorkflow(form: {
   revalidatePath(`/workflow/editor/${workflowId}`);
 }
 
-export async function UnpublishWorkflow(form: {
-  workflowId: string;
-}) {
+export async function UnpublishWorkflow(form: { workflowId: string }) {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("User not authenticated");
