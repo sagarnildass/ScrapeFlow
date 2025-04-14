@@ -33,6 +33,11 @@ export type ExecutionPhase = $Result.DefaultSelection<Prisma.$ExecutionPhasePayl
  * 
  */
 export type ExecutionLog = $Result.DefaultSelection<Prisma.$ExecutionLogPayload>
+/**
+ * Model UserBalance
+ * 
+ */
+export type UserBalance = $Result.DefaultSelection<Prisma.$UserBalancePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -198,6 +203,16 @@ export class PrismaClient<
     * ```
     */
   get executionLog(): Prisma.ExecutionLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userBalance`: Exposes CRUD operations for the **UserBalance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserBalances
+    * const userBalances = await prisma.userBalance.findMany()
+    * ```
+    */
+  get userBalance(): Prisma.UserBalanceDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -641,7 +656,8 @@ export namespace Prisma {
     Workflow: 'Workflow',
     WorkflowExecution: 'WorkflowExecution',
     ExecutionPhase: 'ExecutionPhase',
-    ExecutionLog: 'ExecutionLog'
+    ExecutionLog: 'ExecutionLog',
+    UserBalance: 'UserBalance'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +676,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "workflow" | "workflowExecution" | "executionPhase" | "executionLog"
+      modelProps: "workflow" | "workflowExecution" | "executionPhase" | "executionLog" | "userBalance"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -960,6 +976,80 @@ export namespace Prisma {
           }
         }
       }
+      UserBalance: {
+        payload: Prisma.$UserBalancePayload<ExtArgs>
+        fields: Prisma.UserBalanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserBalanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserBalanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>
+          }
+          findFirst: {
+            args: Prisma.UserBalanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserBalanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>
+          }
+          findMany: {
+            args: Prisma.UserBalanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>[]
+          }
+          create: {
+            args: Prisma.UserBalanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>
+          }
+          createMany: {
+            args: Prisma.UserBalanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserBalanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>[]
+          }
+          delete: {
+            args: Prisma.UserBalanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>
+          }
+          update: {
+            args: Prisma.UserBalanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>
+          }
+          deleteMany: {
+            args: Prisma.UserBalanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserBalanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserBalanceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>[]
+          }
+          upsert: {
+            args: Prisma.UserBalanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserBalancePayload>
+          }
+          aggregate: {
+            args: Prisma.UserBalanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserBalance>
+          }
+          groupBy: {
+            args: Prisma.UserBalanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserBalanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserBalanceCountArgs<ExtArgs>
+            result: $Utils.Optional<UserBalanceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1048,6 +1138,7 @@ export namespace Prisma {
     workflowExecution?: WorkflowExecutionOmit
     executionPhase?: ExecutionPhaseOmit
     executionLog?: ExecutionLogOmit
+    userBalance?: UserBalanceOmit
   }
 
   /* Types for Logging */
@@ -5837,6 +5928,994 @@ export namespace Prisma {
 
 
   /**
+   * Model UserBalance
+   */
+
+  export type AggregateUserBalance = {
+    _count: UserBalanceCountAggregateOutputType | null
+    _avg: UserBalanceAvgAggregateOutputType | null
+    _sum: UserBalanceSumAggregateOutputType | null
+    _min: UserBalanceMinAggregateOutputType | null
+    _max: UserBalanceMaxAggregateOutputType | null
+  }
+
+  export type UserBalanceAvgAggregateOutputType = {
+    credits: number | null
+  }
+
+  export type UserBalanceSumAggregateOutputType = {
+    credits: number | null
+  }
+
+  export type UserBalanceMinAggregateOutputType = {
+    userId: string | null
+    credits: number | null
+  }
+
+  export type UserBalanceMaxAggregateOutputType = {
+    userId: string | null
+    credits: number | null
+  }
+
+  export type UserBalanceCountAggregateOutputType = {
+    userId: number
+    credits: number
+    _all: number
+  }
+
+
+  export type UserBalanceAvgAggregateInputType = {
+    credits?: true
+  }
+
+  export type UserBalanceSumAggregateInputType = {
+    credits?: true
+  }
+
+  export type UserBalanceMinAggregateInputType = {
+    userId?: true
+    credits?: true
+  }
+
+  export type UserBalanceMaxAggregateInputType = {
+    userId?: true
+    credits?: true
+  }
+
+  export type UserBalanceCountAggregateInputType = {
+    userId?: true
+    credits?: true
+    _all?: true
+  }
+
+  export type UserBalanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserBalance to aggregate.
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBalances to fetch.
+     */
+    orderBy?: UserBalanceOrderByWithRelationInput | UserBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBalances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserBalances
+    **/
+    _count?: true | UserBalanceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserBalanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserBalanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserBalanceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserBalanceMaxAggregateInputType
+  }
+
+  export type GetUserBalanceAggregateType<T extends UserBalanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserBalance]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserBalance[P]>
+      : GetScalarType<T[P], AggregateUserBalance[P]>
+  }
+
+
+
+
+  export type UserBalanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserBalanceWhereInput
+    orderBy?: UserBalanceOrderByWithAggregationInput | UserBalanceOrderByWithAggregationInput[]
+    by: UserBalanceScalarFieldEnum[] | UserBalanceScalarFieldEnum
+    having?: UserBalanceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserBalanceCountAggregateInputType | true
+    _avg?: UserBalanceAvgAggregateInputType
+    _sum?: UserBalanceSumAggregateInputType
+    _min?: UserBalanceMinAggregateInputType
+    _max?: UserBalanceMaxAggregateInputType
+  }
+
+  export type UserBalanceGroupByOutputType = {
+    userId: string
+    credits: number
+    _count: UserBalanceCountAggregateOutputType | null
+    _avg: UserBalanceAvgAggregateOutputType | null
+    _sum: UserBalanceSumAggregateOutputType | null
+    _min: UserBalanceMinAggregateOutputType | null
+    _max: UserBalanceMaxAggregateOutputType | null
+  }
+
+  type GetUserBalanceGroupByPayload<T extends UserBalanceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserBalanceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserBalanceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserBalanceGroupByOutputType[P]>
+            : GetScalarType<T[P], UserBalanceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserBalanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    credits?: boolean
+  }, ExtArgs["result"]["userBalance"]>
+
+  export type UserBalanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    credits?: boolean
+  }, ExtArgs["result"]["userBalance"]>
+
+  export type UserBalanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    credits?: boolean
+  }, ExtArgs["result"]["userBalance"]>
+
+  export type UserBalanceSelectScalar = {
+    userId?: boolean
+    credits?: boolean
+  }
+
+  export type UserBalanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "credits", ExtArgs["result"]["userBalance"]>
+
+  export type $UserBalancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserBalance"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      userId: string
+      credits: number
+    }, ExtArgs["result"]["userBalance"]>
+    composites: {}
+  }
+
+  type UserBalanceGetPayload<S extends boolean | null | undefined | UserBalanceDefaultArgs> = $Result.GetResult<Prisma.$UserBalancePayload, S>
+
+  type UserBalanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserBalanceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserBalanceCountAggregateInputType | true
+    }
+
+  export interface UserBalanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserBalance'], meta: { name: 'UserBalance' } }
+    /**
+     * Find zero or one UserBalance that matches the filter.
+     * @param {UserBalanceFindUniqueArgs} args - Arguments to find a UserBalance
+     * @example
+     * // Get one UserBalance
+     * const userBalance = await prisma.userBalance.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserBalanceFindUniqueArgs>(args: SelectSubset<T, UserBalanceFindUniqueArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserBalance that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserBalanceFindUniqueOrThrowArgs} args - Arguments to find a UserBalance
+     * @example
+     * // Get one UserBalance
+     * const userBalance = await prisma.userBalance.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserBalanceFindUniqueOrThrowArgs>(args: SelectSubset<T, UserBalanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserBalance that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceFindFirstArgs} args - Arguments to find a UserBalance
+     * @example
+     * // Get one UserBalance
+     * const userBalance = await prisma.userBalance.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserBalanceFindFirstArgs>(args?: SelectSubset<T, UserBalanceFindFirstArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserBalance that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceFindFirstOrThrowArgs} args - Arguments to find a UserBalance
+     * @example
+     * // Get one UserBalance
+     * const userBalance = await prisma.userBalance.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserBalanceFindFirstOrThrowArgs>(args?: SelectSubset<T, UserBalanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserBalances that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserBalances
+     * const userBalances = await prisma.userBalance.findMany()
+     * 
+     * // Get first 10 UserBalances
+     * const userBalances = await prisma.userBalance.findMany({ take: 10 })
+     * 
+     * // Only select the `userId`
+     * const userBalanceWithUserIdOnly = await prisma.userBalance.findMany({ select: { userId: true } })
+     * 
+     */
+    findMany<T extends UserBalanceFindManyArgs>(args?: SelectSubset<T, UserBalanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserBalance.
+     * @param {UserBalanceCreateArgs} args - Arguments to create a UserBalance.
+     * @example
+     * // Create one UserBalance
+     * const UserBalance = await prisma.userBalance.create({
+     *   data: {
+     *     // ... data to create a UserBalance
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserBalanceCreateArgs>(args: SelectSubset<T, UserBalanceCreateArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserBalances.
+     * @param {UserBalanceCreateManyArgs} args - Arguments to create many UserBalances.
+     * @example
+     * // Create many UserBalances
+     * const userBalance = await prisma.userBalance.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserBalanceCreateManyArgs>(args?: SelectSubset<T, UserBalanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserBalances and returns the data saved in the database.
+     * @param {UserBalanceCreateManyAndReturnArgs} args - Arguments to create many UserBalances.
+     * @example
+     * // Create many UserBalances
+     * const userBalance = await prisma.userBalance.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserBalances and only return the `userId`
+     * const userBalanceWithUserIdOnly = await prisma.userBalance.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserBalanceCreateManyAndReturnArgs>(args?: SelectSubset<T, UserBalanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserBalance.
+     * @param {UserBalanceDeleteArgs} args - Arguments to delete one UserBalance.
+     * @example
+     * // Delete one UserBalance
+     * const UserBalance = await prisma.userBalance.delete({
+     *   where: {
+     *     // ... filter to delete one UserBalance
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserBalanceDeleteArgs>(args: SelectSubset<T, UserBalanceDeleteArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserBalance.
+     * @param {UserBalanceUpdateArgs} args - Arguments to update one UserBalance.
+     * @example
+     * // Update one UserBalance
+     * const userBalance = await prisma.userBalance.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserBalanceUpdateArgs>(args: SelectSubset<T, UserBalanceUpdateArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserBalances.
+     * @param {UserBalanceDeleteManyArgs} args - Arguments to filter UserBalances to delete.
+     * @example
+     * // Delete a few UserBalances
+     * const { count } = await prisma.userBalance.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserBalanceDeleteManyArgs>(args?: SelectSubset<T, UserBalanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserBalances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserBalances
+     * const userBalance = await prisma.userBalance.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserBalanceUpdateManyArgs>(args: SelectSubset<T, UserBalanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserBalances and returns the data updated in the database.
+     * @param {UserBalanceUpdateManyAndReturnArgs} args - Arguments to update many UserBalances.
+     * @example
+     * // Update many UserBalances
+     * const userBalance = await prisma.userBalance.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserBalances and only return the `userId`
+     * const userBalanceWithUserIdOnly = await prisma.userBalance.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserBalanceUpdateManyAndReturnArgs>(args: SelectSubset<T, UserBalanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserBalance.
+     * @param {UserBalanceUpsertArgs} args - Arguments to update or create a UserBalance.
+     * @example
+     * // Update or create a UserBalance
+     * const userBalance = await prisma.userBalance.upsert({
+     *   create: {
+     *     // ... data to create a UserBalance
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserBalance we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserBalanceUpsertArgs>(args: SelectSubset<T, UserBalanceUpsertArgs<ExtArgs>>): Prisma__UserBalanceClient<$Result.GetResult<Prisma.$UserBalancePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserBalances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceCountArgs} args - Arguments to filter UserBalances to count.
+     * @example
+     * // Count the number of UserBalances
+     * const count = await prisma.userBalance.count({
+     *   where: {
+     *     // ... the filter for the UserBalances we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserBalanceCountArgs>(
+      args?: Subset<T, UserBalanceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserBalanceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserBalance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserBalanceAggregateArgs>(args: Subset<T, UserBalanceAggregateArgs>): Prisma.PrismaPromise<GetUserBalanceAggregateType<T>>
+
+    /**
+     * Group by UserBalance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserBalanceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserBalanceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserBalanceGroupByArgs['orderBy'] }
+        : { orderBy?: UserBalanceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserBalanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserBalanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserBalance model
+   */
+  readonly fields: UserBalanceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserBalance.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserBalanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserBalance model
+   */
+  interface UserBalanceFieldRefs {
+    readonly userId: FieldRef<"UserBalance", 'String'>
+    readonly credits: FieldRef<"UserBalance", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserBalance findUnique
+   */
+  export type UserBalanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * Filter, which UserBalance to fetch.
+     */
+    where: UserBalanceWhereUniqueInput
+  }
+
+  /**
+   * UserBalance findUniqueOrThrow
+   */
+  export type UserBalanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * Filter, which UserBalance to fetch.
+     */
+    where: UserBalanceWhereUniqueInput
+  }
+
+  /**
+   * UserBalance findFirst
+   */
+  export type UserBalanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * Filter, which UserBalance to fetch.
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBalances to fetch.
+     */
+    orderBy?: UserBalanceOrderByWithRelationInput | UserBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserBalances.
+     */
+    cursor?: UserBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBalances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserBalances.
+     */
+    distinct?: UserBalanceScalarFieldEnum | UserBalanceScalarFieldEnum[]
+  }
+
+  /**
+   * UserBalance findFirstOrThrow
+   */
+  export type UserBalanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * Filter, which UserBalance to fetch.
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBalances to fetch.
+     */
+    orderBy?: UserBalanceOrderByWithRelationInput | UserBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserBalances.
+     */
+    cursor?: UserBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBalances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserBalances.
+     */
+    distinct?: UserBalanceScalarFieldEnum | UserBalanceScalarFieldEnum[]
+  }
+
+  /**
+   * UserBalance findMany
+   */
+  export type UserBalanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * Filter, which UserBalances to fetch.
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserBalances to fetch.
+     */
+    orderBy?: UserBalanceOrderByWithRelationInput | UserBalanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserBalances.
+     */
+    cursor?: UserBalanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserBalances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserBalances.
+     */
+    skip?: number
+    distinct?: UserBalanceScalarFieldEnum | UserBalanceScalarFieldEnum[]
+  }
+
+  /**
+   * UserBalance create
+   */
+  export type UserBalanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * The data needed to create a UserBalance.
+     */
+    data: XOR<UserBalanceCreateInput, UserBalanceUncheckedCreateInput>
+  }
+
+  /**
+   * UserBalance createMany
+   */
+  export type UserBalanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserBalances.
+     */
+    data: UserBalanceCreateManyInput | UserBalanceCreateManyInput[]
+  }
+
+  /**
+   * UserBalance createManyAndReturn
+   */
+  export type UserBalanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserBalances.
+     */
+    data: UserBalanceCreateManyInput | UserBalanceCreateManyInput[]
+  }
+
+  /**
+   * UserBalance update
+   */
+  export type UserBalanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * The data needed to update a UserBalance.
+     */
+    data: XOR<UserBalanceUpdateInput, UserBalanceUncheckedUpdateInput>
+    /**
+     * Choose, which UserBalance to update.
+     */
+    where: UserBalanceWhereUniqueInput
+  }
+
+  /**
+   * UserBalance updateMany
+   */
+  export type UserBalanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserBalances.
+     */
+    data: XOR<UserBalanceUpdateManyMutationInput, UserBalanceUncheckedUpdateManyInput>
+    /**
+     * Filter which UserBalances to update
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * Limit how many UserBalances to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserBalance updateManyAndReturn
+   */
+  export type UserBalanceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * The data used to update UserBalances.
+     */
+    data: XOR<UserBalanceUpdateManyMutationInput, UserBalanceUncheckedUpdateManyInput>
+    /**
+     * Filter which UserBalances to update
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * Limit how many UserBalances to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserBalance upsert
+   */
+  export type UserBalanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * The filter to search for the UserBalance to update in case it exists.
+     */
+    where: UserBalanceWhereUniqueInput
+    /**
+     * In case the UserBalance found by the `where` argument doesn't exist, create a new UserBalance with this data.
+     */
+    create: XOR<UserBalanceCreateInput, UserBalanceUncheckedCreateInput>
+    /**
+     * In case the UserBalance was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserBalanceUpdateInput, UserBalanceUncheckedUpdateInput>
+  }
+
+  /**
+   * UserBalance delete
+   */
+  export type UserBalanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+    /**
+     * Filter which UserBalance to delete.
+     */
+    where: UserBalanceWhereUniqueInput
+  }
+
+  /**
+   * UserBalance deleteMany
+   */
+  export type UserBalanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserBalances to delete
+     */
+    where?: UserBalanceWhereInput
+    /**
+     * Limit how many UserBalances to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserBalance without action
+   */
+  export type UserBalanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserBalance
+     */
+    select?: UserBalanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserBalance
+     */
+    omit?: UserBalanceOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -5907,6 +6986,14 @@ export namespace Prisma {
   };
 
   export type ExecutionLogScalarFieldEnum = (typeof ExecutionLogScalarFieldEnum)[keyof typeof ExecutionLogScalarFieldEnum]
+
+
+  export const UserBalanceScalarFieldEnum: {
+    userId: 'userId',
+    credits: 'credits'
+  };
+
+  export type UserBalanceScalarFieldEnum = (typeof UserBalanceScalarFieldEnum)[keyof typeof UserBalanceScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6282,6 +7369,45 @@ export namespace Prisma {
     executionPhaseId?: StringWithAggregatesFilter<"ExecutionLog"> | string
   }
 
+  export type UserBalanceWhereInput = {
+    AND?: UserBalanceWhereInput | UserBalanceWhereInput[]
+    OR?: UserBalanceWhereInput[]
+    NOT?: UserBalanceWhereInput | UserBalanceWhereInput[]
+    userId?: StringFilter<"UserBalance"> | string
+    credits?: IntFilter<"UserBalance"> | number
+  }
+
+  export type UserBalanceOrderByWithRelationInput = {
+    userId?: SortOrder
+    credits?: SortOrder
+  }
+
+  export type UserBalanceWhereUniqueInput = Prisma.AtLeast<{
+    userId?: string
+    AND?: UserBalanceWhereInput | UserBalanceWhereInput[]
+    OR?: UserBalanceWhereInput[]
+    NOT?: UserBalanceWhereInput | UserBalanceWhereInput[]
+    credits?: IntFilter<"UserBalance"> | number
+  }, "userId">
+
+  export type UserBalanceOrderByWithAggregationInput = {
+    userId?: SortOrder
+    credits?: SortOrder
+    _count?: UserBalanceCountOrderByAggregateInput
+    _avg?: UserBalanceAvgOrderByAggregateInput
+    _max?: UserBalanceMaxOrderByAggregateInput
+    _min?: UserBalanceMinOrderByAggregateInput
+    _sum?: UserBalanceSumOrderByAggregateInput
+  }
+
+  export type UserBalanceScalarWhereWithAggregatesInput = {
+    AND?: UserBalanceScalarWhereWithAggregatesInput | UserBalanceScalarWhereWithAggregatesInput[]
+    OR?: UserBalanceScalarWhereWithAggregatesInput[]
+    NOT?: UserBalanceScalarWhereWithAggregatesInput | UserBalanceScalarWhereWithAggregatesInput[]
+    userId?: StringWithAggregatesFilter<"UserBalance"> | string
+    credits?: IntWithAggregatesFilter<"UserBalance"> | number
+  }
+
   export type WorkflowCreateInput = {
     id?: string
     userId: string
@@ -6639,6 +7765,41 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
     executionPhaseId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UserBalanceCreateInput = {
+    userId: string
+    credits?: number
+  }
+
+  export type UserBalanceUncheckedCreateInput = {
+    userId: string
+    credits?: number
+  }
+
+  export type UserBalanceUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    credits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UserBalanceUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    credits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UserBalanceCreateManyInput = {
+    userId: string
+    credits?: number
+  }
+
+  export type UserBalanceUpdateManyMutationInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    credits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UserBalanceUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    credits?: IntFieldUpdateOperationsInput | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -7028,6 +8189,29 @@ export namespace Prisma {
     message?: SortOrder
     timestamp?: SortOrder
     executionPhaseId?: SortOrder
+  }
+
+  export type UserBalanceCountOrderByAggregateInput = {
+    userId?: SortOrder
+    credits?: SortOrder
+  }
+
+  export type UserBalanceAvgOrderByAggregateInput = {
+    credits?: SortOrder
+  }
+
+  export type UserBalanceMaxOrderByAggregateInput = {
+    userId?: SortOrder
+    credits?: SortOrder
+  }
+
+  export type UserBalanceMinOrderByAggregateInput = {
+    userId?: SortOrder
+    credits?: SortOrder
+  }
+
+  export type UserBalanceSumOrderByAggregateInput = {
+    credits?: SortOrder
   }
 
   export type WorkflowExecutionCreateNestedManyWithoutWorkflowInput = {
