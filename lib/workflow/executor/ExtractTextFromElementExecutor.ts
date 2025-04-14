@@ -8,12 +8,12 @@ export async function ExtractTextFromElementExecutor(
   try {
     const selector = environment.getInput("Selector");
     if (!selector) {
-      console.error("Selector is required");
+      environment.log.error("Selector is not provided");
       return false;
     }
     const html = environment.getInput("Html");
     if (!html) {
-      console.error("Html is required");
+      environment.log.error("Html is not provided");
       return false;
     }
 
@@ -21,22 +21,23 @@ export async function ExtractTextFromElementExecutor(
     const element = $(selector);
 
     if (!element) {
-      console.error(`Element with selector ${selector} not found`);
+      environment.log.error(`Element with selector ${selector} not found`);
       return false;
     }
 
     const extractedText = $.text(element);
 
     if (!extractedText) {
-      console.error(`Element has no text with selector ${selector}`);
+      environment.log.error(`Element has no text with selector ${selector}`);
       return false;
     }
 
     environment.setOutput("Extracted text", extractedText);
 
     return true;
-  } catch (error) {
-    console.error(error);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    environment.log.error(error.message);
     return false;
   }
 }

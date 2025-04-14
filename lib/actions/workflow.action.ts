@@ -71,6 +71,13 @@ export async function GetWorkflowPhaseDetails(phaseId: string) {
         userId,
       },
     },
+    include: {
+      logs: {
+        orderBy: {
+          timestamp: "asc",
+        },
+      },
+    },
   });
 }
 
@@ -239,8 +246,7 @@ export async function RunWorkflow(form: {
   if (!execution) {
     throw new Error("Failed to create workflow execution");
   }
-  
+
   ExecuteWorkflow(execution.id);
   return { executionId: execution.id };
 }
-

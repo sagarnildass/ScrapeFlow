@@ -8,8 +8,9 @@ export async function PageToHtmlExecutor(
     const html = await environment.getPage()!.content();
     environment.setOutput("Html", html);
     return true;
-  } catch (error) {
-    console.error(error);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    environment.log.error(error.message);
     return false;
   }
 }
