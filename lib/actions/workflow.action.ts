@@ -36,6 +36,27 @@ export async function GetWorkflowsForUser() {
   });
 }
 
+export async function GetWorkflowExecutionWithPhases(executionId: string) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  return prisma.workflowExecution.findUnique({
+    where: {
+      id: executionId,
+      userId,
+    },
+    include: {
+      phases: {
+        orderBy: {
+          number: "asc",
+        },
+      },
+    },
+  });
+}
+
 export async function CreateWorkflow(form: createWorkflowSchemaType) {
   const { success, data } = createWorkflowSchema.safeParse(form);
   if (!success) {
@@ -200,6 +221,6 @@ export async function RunWorkflow(form: {
   if (!execution) {
     throw new Error("Failed to create workflow execution");
   }
-  
+
   return { executionId: execution.id };
 }
