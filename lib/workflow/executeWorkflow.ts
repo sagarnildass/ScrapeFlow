@@ -46,7 +46,6 @@ export async function ExecuteWorkflow(executionId: string) {
   let executionFailed = false;
 
   for (const phase of execution.phases) {
-    
     // TODO: Execute phase
     const phaseExecution = await executeWorkflowPhase(
       phase,
@@ -182,18 +181,40 @@ async function executeWorkflowPhase(
 
   const creditsRequired = TaskRegistry[node.data.type].credits;
 
-  // TODO: Decrement user balance (with required credits)
-  let success = await decrementCredits(userId, creditsRequired, logCollector);
-  const creditsConsumed = success ? creditsRequired : 0;
+  // First execute the phase
+  const success = await executePhase(phase, node, environment, logCollector);
 
+  // Only deduct credits if the phase execution was successful
+  let creditsConsumed = 0;
   if (success) {
-    // We can execute the phase if the credits are sufficient
-    success = await executePhase(phase, node, environment, logCollector);
+    const creditDeductionSuccess = await decrementCredits(
+      userId,
+      creditsRequired,
+      logCollector
+    );
+    if (!creditDeductionSuccess) {
+      // If we couldn't deduct credits after successful execution, mark the phase as failed
+      await finalizePhase(
+        phase.id,
+        false,
+        environment.phases[node.id].outputs,
+        logCollector,
+        0
+      );
+      return { success: false, creditsConsumed: 0 };
+    }
+    creditsConsumed = creditsRequired;
   }
 
   const outputs = environment.phases[node.id].outputs;
 
-  await finalizePhase(phase.id, success, outputs, logCollector, creditsConsumed);
+  await finalizePhase(
+    phase.id,
+    success,
+    outputs,
+    logCollector,
+    creditsConsumed
+  );
 
   return { success, creditsConsumed };
 }
