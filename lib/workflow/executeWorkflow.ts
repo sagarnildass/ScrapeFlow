@@ -9,7 +9,7 @@ import { ExecutionPhase } from "../generated/prisma";
 import { AppNode } from "@/types/appNode";
 import { TaskRegistry } from "./task/registry";
 import { ExecutorRegistry } from "./executor/registry";
-import { Environment } from "@/types/executor";
+import { Environment, ExecutionEnvironment } from "@/types/executor";
 
 export async function ExecuteWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -142,7 +142,10 @@ async function finalizeWorkflowExecution(
     });
 }
 
-async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment) {
+async function executeWorkflowPhase(
+  phase: ExecutionPhase,
+  environment: Environment
+) {
   const startedAt = new Date();
   const node = JSON.parse(phase.node) as AppNode;
   setupEnvironmentForPhase(node, environment);
@@ -200,12 +203,35 @@ async function executePhase(
     return false;
   }
 
-  return await runFn(environment);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const executionEnvironment: ExecutionEnvironment<any> =
+    createExecutionEnvironment(node, environment);
+
+  return await runFn(executionEnvironment);
 }
 
 function setupEnvironmentForPhase(node: AppNode, environment: Environment) {
   environment.phases[node.id] = {
     inputs: {},
     outputs: {},
+  };
+
+  const inputs = TaskRegistry[node.data.type].inputs;
+
+  for (const input of inputs) {
+    const inputValue = node.data.inputs[input.name];
+
+    if (inputValue) {
+      environment.phases[node.id].inputs[input.name] = inputValue;
+      continue;
+    }
+
+    // Get input value from outputs of previous phase in the environment
+  }
+}
+
+function createExecutionEnvironment(node: AppNode, environment: Environment) {
+  return {
+    getInput: (name: string) => environment.phases[node.id]?.inputs[name],
   };
 }
