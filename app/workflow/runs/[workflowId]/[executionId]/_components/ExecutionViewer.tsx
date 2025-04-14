@@ -4,7 +4,10 @@ import {
   GetWorkflowExecutionWithPhases,
   GetWorkflowPhaseDetails,
 } from "@/lib/actions/workflow.action";
-import { WorkflowExecutionStatus } from "@/types/workflow";
+import {
+  WorkflowExecutionStatus,
+  ExecutionPhaseStatus,
+} from "@/types/workflow";
 import { useQuery } from "@tanstack/react-query";
 import {
   CalendarIcon,
@@ -15,7 +18,7 @@ import {
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -34,15 +37,14 @@ import { ExecutionLog } from "@/lib/generated/prisma";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { LogLevel } from "@/types/log";
-
+import PhaseStatusBadge from "./PhaseStatusBadge";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -63,6 +65,24 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
   });
 
   const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
+
+  useEffect(() => {
+    // While running, we auto-select the current running phase in the sidebar
+    const phases = query.data?.phases || [];
+    if (isRunning) {
+      // Select the last executed phase
+      const phaseToSelect = phases.toSorted((a, b) =>
+        a.startedAt! > b.startedAt! ? -1 : 1
+      )[0];
+      setSelectedPhase(phaseToSelect.id);
+      return;
+    }
+
+    const phaseToSelect = phases.toSorted((a, b) =>
+      a.completedAt! > b.completedAt! ? -1 : 1
+    )[0];
+    setSelectedPhase(phaseToSelect.id);
+  }, [query.data?.phases, isRunning, setSelectedPhase]);
 
   const duration = DatesToDurationString(
     query.data?.completedAt,
@@ -140,7 +160,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
                 <Badge variant="outline">{index + 1}</Badge>
                 <p className="font-semibold">{phase.name}</p>
               </div>
-              <p className="text-xs text-muted-foreground">{phase.status}</p>
+              <PhaseStatusBadge status={phase.status as ExecutionPhaseStatus} />
             </Button>
           ))}
         </div>
@@ -289,26 +309,44 @@ function LogViewer({ logs }: { logs: ExecutionLog[] | undefined }) {
           <TableHeader className="text-muted-foreground text-sm">
             <TableRow>
               <TableHead className="pl-4 text-muted-foreground">Time</TableHead>
-              <TableHead className="pl-4 text-muted-foreground">Level</TableHead>
-              <TableHead className="pl-4 text-muted-foreground">Message</TableHead>
+              <TableHead className="pl-4 text-muted-foreground">
+                Level
+              </TableHead>
+              <TableHead className="pl-4 text-muted-foreground">
+                Message
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {logs.map((log) => (
               <TableRow key={log.id} className="text-muted-foreground">
-                <TableCell width={190} className="text-xs text-muted-foreground p-[2px] pl-4">{log.timestamp.toISOString()}</TableCell>
-                <TableCell width={80} className={cn("uppercase text-xs font-bold p-[3px] pl-4",
-                  log.logLevel as LogLevel === "error" && "text-destructive",
-                  log.logLevel as LogLevel === "info" && "text-primary"
-                )}>{log.logLevel}</TableCell>
-                <TableCell className="text-sm flex-1 p-[3px] pl-4">{log.message}</TableCell>
+                <TableCell
+                  width={190}
+                  className="text-xs text-muted-foreground p-[2px] pl-4"
+                >
+                  {log.timestamp.toISOString()}
+                </TableCell>
+                <TableCell
+                  width={80}
+                  className={cn(
+                    "uppercase text-xs font-bold p-[3px] pl-4",
+                    (log.logLevel as LogLevel) === "error" &&
+                      "text-destructive",
+                    (log.logLevel as LogLevel) === "info" && "text-primary"
+                  )}
+                >
+                  {log.logLevel}
+                </TableCell>
+                <TableCell className="text-sm flex-1 p-[3px] pl-4">
+                  {log.message}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export default ExecutionViewer;
