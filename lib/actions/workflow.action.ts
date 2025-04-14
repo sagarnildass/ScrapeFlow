@@ -335,3 +335,43 @@ export async function PublishWorkflow(form: {
 
   revalidatePath(`/workflow/editor/${workflowId}`);
 }
+
+export async function UnpublishWorkflow(form: {
+  workflowId: string;
+}) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const { workflowId } = form;
+
+  const workflow = await prisma.workflow.findUnique({
+    where: {
+      id: workflowId,
+      userId,
+    },
+  });
+
+  if (!workflow) {
+    throw new Error("Workflow not found");
+  }
+
+  if (workflow.status !== WorkflowStatus.PUBLISHED) {
+    throw new Error("Workflow is not published");
+  }
+
+  await prisma.workflow.update({
+    where: {
+      id: workflowId,
+      userId,
+    },
+    data: {
+      status: WorkflowStatus.DRAFT,
+      executionPlan: null,
+      creditsCost: 0,
+    },
+  });
+
+  revalidatePath(`/workflow/editor/${workflowId}`);
+}
