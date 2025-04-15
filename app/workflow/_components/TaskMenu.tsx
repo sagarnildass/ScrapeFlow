@@ -16,8 +16,19 @@ export default function TaskMenu() {
       <Accordion
         type="multiple"
         className="w-full"
-        defaultValue={["extraction"]}
+        defaultValue={["extraction", "interactions", "timing"]}
       >
+        <AccordionItem value="interactions">
+          <AccordionTrigger className="font-bold">
+            User Interactions
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.FILL_INPUT} />
+            <TaskMenuBtn taskType={TaskType.CLICK_ELEMENT} />
+          </AccordionContent>
+        </AccordionItem>
+        
+
         <AccordionItem value="extraction">
           <AccordionTrigger className="font-bold">
             Data Extraction
@@ -27,6 +38,16 @@ export default function TaskMenu() {
             <TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
+
+        <AccordionItem value="timing">
+          <AccordionTrigger className="font-bold">
+            Timing Controls
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.WAIT_FOR_ELEMENT} />
+          </AccordionContent>
+        </AccordionItem>
+
       </Accordion>
     </aside>
   );

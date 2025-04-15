@@ -15,7 +15,7 @@ import { Browser, Page } from "puppeteer";
 import { Edge } from "@xyflow/react";
 import { LogCollector } from "@/types/log";
 import { createLogCollector } from "../log";
-
+import { waitFor } from "../helper/waitFor";
 
 export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -38,7 +38,11 @@ export async function ExecuteWorkflow(executionId: string, nextRunAt?: Date) {
   const environment: Environment = { phases: {} };
 
   // TODO: Initialize workflow execution
-  await initializeWorkflowExecution(executionId, execution.workflowId, nextRunAt);
+  await initializeWorkflowExecution(
+    executionId,
+    execution.workflowId,
+    nextRunAt
+  );
 
   // TODO: Initialize phases status
   await initializePhaseStatuses(execution);
@@ -100,7 +104,7 @@ async function initializeWorkflowExecution(
       lastRunAt: new Date(),
       lastRunStatus: WorkflowExecutionStatus.RUNNING,
       lastRunId: executionId,
-      ...(nextRunAt && { nextRunAt})
+      ...(nextRunAt && { nextRunAt }),
     },
   });
 }
@@ -262,9 +266,11 @@ async function executePhase(
   environment: Environment,
   logCollector: LogCollector
 ): Promise<boolean> {
+  await waitFor(1500);
   const runFn = ExecutorRegistry[node.data.type];
 
   if (!runFn) {
+    logCollector.error(`No executor found for ${node.data.type}`);
     return false;
   }
 
