@@ -221,6 +221,23 @@ export async function DeleteWorkflow(workflowId: string) {
   revalidatePath("/workflows");
 }
 
+export async function DeleteWorkflowCron(id: string) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  await prisma.workflow.update({
+    where: { id, userId },
+    data: {
+      cron: null,
+      nextRunAt: null,
+    },
+  });
+
+  revalidatePath("/workflows");
+}
+
 export async function RunWorkflow(form: {
   workflowId: string;
   flowDefinition?: string;
