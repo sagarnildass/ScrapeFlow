@@ -1,0 +1,20 @@
+{
+  "args": {},
+  "data": "\"“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”\"",
+  "files": {},
+  "form": {},
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "br, gzip, deflate",
+    "Accept-Language": "*",
+    "Content-Length": "121",
+    "Content-Type": "application/json",
+    "Host": "httpbin.org",
+    "Sec-Fetch-Mode": "cors",
+    "User-Agent": "node",
+    "X-Amzn-Trace-Id": "Root=1-67feea25-58f801eb731c01423bafd030"
+  },
+  "json": "“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”",
+  "origin": "223.185.34.208",
+  "url": "https://httpbin.org/post"
+}
