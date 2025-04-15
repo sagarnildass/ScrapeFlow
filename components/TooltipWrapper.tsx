@@ -14,6 +14,7 @@ interface Props {
 }
 
 function TooltipWrapper(props: Props) {
+  
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>

@@ -5,6 +5,8 @@ import { prisma } from "../prisma";
 import {
   createWorkflowSchema,
   createWorkflowSchemaType,
+  duplicateWorkflowSchema,
+  duplicateWorkflowSchemaType,
 } from "@/schema/workflow";
 import {
   WorkflowExecutionPlan,
@@ -133,6 +135,45 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
   }
 
   return result; // Return the result instead of redirecting
+}
+
+export async function DuplicateWorkflow(form: duplicateWorkflowSchemaType) {
+  const { success, data } = duplicateWorkflowSchema.safeParse(form);
+
+  if (!success) {
+    throw new Error("Invalid form data");
+  }
+
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const sourceWorkflow = await prisma.workflow.findUnique({
+    where: {
+      id: data.workflowId,
+      userId,
+    },
+  });
+
+  if (!sourceWorkflow) {
+    throw new Error("workflow not found");
+  }
+
+  const result = await prisma.workflow.create({
+    data: {
+      userId,
+      name: data.name,
+      description: data.description,
+      status: WorkflowStatus.DRAFT,
+      definition: sourceWorkflow.definition,
+    },
+  });
+  if (!result) {
+    throw new Error("Failed to duplicate workflow");
+  }
+
+  revalidatePath("/workflows");
 }
 
 export async function UpdateWorkflow({
