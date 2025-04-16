@@ -38,6 +38,11 @@ export type ExecutionLog = $Result.DefaultSelection<Prisma.$ExecutionLogPayload>
  * 
  */
 export type UserBalance = $Result.DefaultSelection<Prisma.$UserBalancePayload>
+/**
+ * Model Credential
+ * 
+ */
+export type Credential = $Result.DefaultSelection<Prisma.$CredentialPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -213,6 +218,16 @@ export class PrismaClient<
     * ```
     */
   get userBalance(): Prisma.UserBalanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.credential`: Exposes CRUD operations for the **Credential** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Credentials
+    * const credentials = await prisma.credential.findMany()
+    * ```
+    */
+  get credential(): Prisma.CredentialDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -657,7 +672,8 @@ export namespace Prisma {
     WorkflowExecution: 'WorkflowExecution',
     ExecutionPhase: 'ExecutionPhase',
     ExecutionLog: 'ExecutionLog',
-    UserBalance: 'UserBalance'
+    UserBalance: 'UserBalance',
+    Credential: 'Credential'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -676,7 +692,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "workflow" | "workflowExecution" | "executionPhase" | "executionLog" | "userBalance"
+      modelProps: "workflow" | "workflowExecution" | "executionPhase" | "executionLog" | "userBalance" | "credential"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1050,6 +1066,80 @@ export namespace Prisma {
           }
         }
       }
+      Credential: {
+        payload: Prisma.$CredentialPayload<ExtArgs>
+        fields: Prisma.CredentialFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CredentialFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CredentialFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>
+          }
+          findFirst: {
+            args: Prisma.CredentialFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CredentialFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>
+          }
+          findMany: {
+            args: Prisma.CredentialFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>[]
+          }
+          create: {
+            args: Prisma.CredentialCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>
+          }
+          createMany: {
+            args: Prisma.CredentialCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CredentialCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>[]
+          }
+          delete: {
+            args: Prisma.CredentialDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>
+          }
+          update: {
+            args: Prisma.CredentialUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>
+          }
+          deleteMany: {
+            args: Prisma.CredentialDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CredentialUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CredentialUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>[]
+          }
+          upsert: {
+            args: Prisma.CredentialUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CredentialPayload>
+          }
+          aggregate: {
+            args: Prisma.CredentialAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCredential>
+          }
+          groupBy: {
+            args: Prisma.CredentialGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CredentialGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CredentialCountArgs<ExtArgs>
+            result: $Utils.Optional<CredentialCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1139,6 +1229,7 @@ export namespace Prisma {
     executionPhase?: ExecutionPhaseOmit
     executionLog?: ExecutionLogOmit
     userBalance?: UserBalanceOmit
+    credential?: CredentialOmit
   }
 
   /* Types for Logging */
@@ -7002,6 +7093,999 @@ export namespace Prisma {
 
 
   /**
+   * Model Credential
+   */
+
+  export type AggregateCredential = {
+    _count: CredentialCountAggregateOutputType | null
+    _min: CredentialMinAggregateOutputType | null
+    _max: CredentialMaxAggregateOutputType | null
+  }
+
+  export type CredentialMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    value: string | null
+    createdAt: Date | null
+  }
+
+  export type CredentialMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    value: string | null
+    createdAt: Date | null
+  }
+
+  export type CredentialCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    value: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CredentialMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    value?: true
+    createdAt?: true
+  }
+
+  export type CredentialMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    value?: true
+    createdAt?: true
+  }
+
+  export type CredentialCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    value?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CredentialAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Credential to aggregate.
+     */
+    where?: CredentialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Credentials to fetch.
+     */
+    orderBy?: CredentialOrderByWithRelationInput | CredentialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CredentialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Credentials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Credentials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Credentials
+    **/
+    _count?: true | CredentialCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CredentialMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CredentialMaxAggregateInputType
+  }
+
+  export type GetCredentialAggregateType<T extends CredentialAggregateArgs> = {
+        [P in keyof T & keyof AggregateCredential]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCredential[P]>
+      : GetScalarType<T[P], AggregateCredential[P]>
+  }
+
+
+
+
+  export type CredentialGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CredentialWhereInput
+    orderBy?: CredentialOrderByWithAggregationInput | CredentialOrderByWithAggregationInput[]
+    by: CredentialScalarFieldEnum[] | CredentialScalarFieldEnum
+    having?: CredentialScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CredentialCountAggregateInputType | true
+    _min?: CredentialMinAggregateInputType
+    _max?: CredentialMaxAggregateInputType
+  }
+
+  export type CredentialGroupByOutputType = {
+    id: string
+    userId: string
+    name: string
+    value: string
+    createdAt: Date
+    _count: CredentialCountAggregateOutputType | null
+    _min: CredentialMinAggregateOutputType | null
+    _max: CredentialMaxAggregateOutputType | null
+  }
+
+  type GetCredentialGroupByPayload<T extends CredentialGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CredentialGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CredentialGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CredentialGroupByOutputType[P]>
+            : GetScalarType<T[P], CredentialGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CredentialSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["credential"]>
+
+  export type CredentialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["credential"]>
+
+  export type CredentialSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["credential"]>
+
+  export type CredentialSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }
+
+  export type CredentialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "value" | "createdAt", ExtArgs["result"]["credential"]>
+
+  export type $CredentialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Credential"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      name: string
+      value: string
+      createdAt: Date
+    }, ExtArgs["result"]["credential"]>
+    composites: {}
+  }
+
+  type CredentialGetPayload<S extends boolean | null | undefined | CredentialDefaultArgs> = $Result.GetResult<Prisma.$CredentialPayload, S>
+
+  type CredentialCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CredentialFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CredentialCountAggregateInputType | true
+    }
+
+  export interface CredentialDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Credential'], meta: { name: 'Credential' } }
+    /**
+     * Find zero or one Credential that matches the filter.
+     * @param {CredentialFindUniqueArgs} args - Arguments to find a Credential
+     * @example
+     * // Get one Credential
+     * const credential = await prisma.credential.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CredentialFindUniqueArgs>(args: SelectSubset<T, CredentialFindUniqueArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Credential that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CredentialFindUniqueOrThrowArgs} args - Arguments to find a Credential
+     * @example
+     * // Get one Credential
+     * const credential = await prisma.credential.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CredentialFindUniqueOrThrowArgs>(args: SelectSubset<T, CredentialFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Credential that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialFindFirstArgs} args - Arguments to find a Credential
+     * @example
+     * // Get one Credential
+     * const credential = await prisma.credential.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CredentialFindFirstArgs>(args?: SelectSubset<T, CredentialFindFirstArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Credential that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialFindFirstOrThrowArgs} args - Arguments to find a Credential
+     * @example
+     * // Get one Credential
+     * const credential = await prisma.credential.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CredentialFindFirstOrThrowArgs>(args?: SelectSubset<T, CredentialFindFirstOrThrowArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Credentials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Credentials
+     * const credentials = await prisma.credential.findMany()
+     * 
+     * // Get first 10 Credentials
+     * const credentials = await prisma.credential.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const credentialWithIdOnly = await prisma.credential.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CredentialFindManyArgs>(args?: SelectSubset<T, CredentialFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Credential.
+     * @param {CredentialCreateArgs} args - Arguments to create a Credential.
+     * @example
+     * // Create one Credential
+     * const Credential = await prisma.credential.create({
+     *   data: {
+     *     // ... data to create a Credential
+     *   }
+     * })
+     * 
+     */
+    create<T extends CredentialCreateArgs>(args: SelectSubset<T, CredentialCreateArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Credentials.
+     * @param {CredentialCreateManyArgs} args - Arguments to create many Credentials.
+     * @example
+     * // Create many Credentials
+     * const credential = await prisma.credential.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CredentialCreateManyArgs>(args?: SelectSubset<T, CredentialCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Credentials and returns the data saved in the database.
+     * @param {CredentialCreateManyAndReturnArgs} args - Arguments to create many Credentials.
+     * @example
+     * // Create many Credentials
+     * const credential = await prisma.credential.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Credentials and only return the `id`
+     * const credentialWithIdOnly = await prisma.credential.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CredentialCreateManyAndReturnArgs>(args?: SelectSubset<T, CredentialCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Credential.
+     * @param {CredentialDeleteArgs} args - Arguments to delete one Credential.
+     * @example
+     * // Delete one Credential
+     * const Credential = await prisma.credential.delete({
+     *   where: {
+     *     // ... filter to delete one Credential
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CredentialDeleteArgs>(args: SelectSubset<T, CredentialDeleteArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Credential.
+     * @param {CredentialUpdateArgs} args - Arguments to update one Credential.
+     * @example
+     * // Update one Credential
+     * const credential = await prisma.credential.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CredentialUpdateArgs>(args: SelectSubset<T, CredentialUpdateArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Credentials.
+     * @param {CredentialDeleteManyArgs} args - Arguments to filter Credentials to delete.
+     * @example
+     * // Delete a few Credentials
+     * const { count } = await prisma.credential.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CredentialDeleteManyArgs>(args?: SelectSubset<T, CredentialDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Credentials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Credentials
+     * const credential = await prisma.credential.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CredentialUpdateManyArgs>(args: SelectSubset<T, CredentialUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Credentials and returns the data updated in the database.
+     * @param {CredentialUpdateManyAndReturnArgs} args - Arguments to update many Credentials.
+     * @example
+     * // Update many Credentials
+     * const credential = await prisma.credential.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Credentials and only return the `id`
+     * const credentialWithIdOnly = await prisma.credential.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CredentialUpdateManyAndReturnArgs>(args: SelectSubset<T, CredentialUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Credential.
+     * @param {CredentialUpsertArgs} args - Arguments to update or create a Credential.
+     * @example
+     * // Update or create a Credential
+     * const credential = await prisma.credential.upsert({
+     *   create: {
+     *     // ... data to create a Credential
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Credential we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CredentialUpsertArgs>(args: SelectSubset<T, CredentialUpsertArgs<ExtArgs>>): Prisma__CredentialClient<$Result.GetResult<Prisma.$CredentialPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Credentials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialCountArgs} args - Arguments to filter Credentials to count.
+     * @example
+     * // Count the number of Credentials
+     * const count = await prisma.credential.count({
+     *   where: {
+     *     // ... the filter for the Credentials we want to count
+     *   }
+     * })
+    **/
+    count<T extends CredentialCountArgs>(
+      args?: Subset<T, CredentialCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CredentialCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Credential.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CredentialAggregateArgs>(args: Subset<T, CredentialAggregateArgs>): Prisma.PrismaPromise<GetCredentialAggregateType<T>>
+
+    /**
+     * Group by Credential.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CredentialGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CredentialGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CredentialGroupByArgs['orderBy'] }
+        : { orderBy?: CredentialGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CredentialGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCredentialGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Credential model
+   */
+  readonly fields: CredentialFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Credential.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CredentialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Credential model
+   */
+  interface CredentialFieldRefs {
+    readonly id: FieldRef<"Credential", 'String'>
+    readonly userId: FieldRef<"Credential", 'String'>
+    readonly name: FieldRef<"Credential", 'String'>
+    readonly value: FieldRef<"Credential", 'String'>
+    readonly createdAt: FieldRef<"Credential", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Credential findUnique
+   */
+  export type CredentialFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * Filter, which Credential to fetch.
+     */
+    where: CredentialWhereUniqueInput
+  }
+
+  /**
+   * Credential findUniqueOrThrow
+   */
+  export type CredentialFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * Filter, which Credential to fetch.
+     */
+    where: CredentialWhereUniqueInput
+  }
+
+  /**
+   * Credential findFirst
+   */
+  export type CredentialFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * Filter, which Credential to fetch.
+     */
+    where?: CredentialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Credentials to fetch.
+     */
+    orderBy?: CredentialOrderByWithRelationInput | CredentialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Credentials.
+     */
+    cursor?: CredentialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Credentials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Credentials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Credentials.
+     */
+    distinct?: CredentialScalarFieldEnum | CredentialScalarFieldEnum[]
+  }
+
+  /**
+   * Credential findFirstOrThrow
+   */
+  export type CredentialFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * Filter, which Credential to fetch.
+     */
+    where?: CredentialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Credentials to fetch.
+     */
+    orderBy?: CredentialOrderByWithRelationInput | CredentialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Credentials.
+     */
+    cursor?: CredentialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Credentials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Credentials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Credentials.
+     */
+    distinct?: CredentialScalarFieldEnum | CredentialScalarFieldEnum[]
+  }
+
+  /**
+   * Credential findMany
+   */
+  export type CredentialFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * Filter, which Credentials to fetch.
+     */
+    where?: CredentialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Credentials to fetch.
+     */
+    orderBy?: CredentialOrderByWithRelationInput | CredentialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Credentials.
+     */
+    cursor?: CredentialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Credentials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Credentials.
+     */
+    skip?: number
+    distinct?: CredentialScalarFieldEnum | CredentialScalarFieldEnum[]
+  }
+
+  /**
+   * Credential create
+   */
+  export type CredentialCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Credential.
+     */
+    data: XOR<CredentialCreateInput, CredentialUncheckedCreateInput>
+  }
+
+  /**
+   * Credential createMany
+   */
+  export type CredentialCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Credentials.
+     */
+    data: CredentialCreateManyInput | CredentialCreateManyInput[]
+  }
+
+  /**
+   * Credential createManyAndReturn
+   */
+  export type CredentialCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * The data used to create many Credentials.
+     */
+    data: CredentialCreateManyInput | CredentialCreateManyInput[]
+  }
+
+  /**
+   * Credential update
+   */
+  export type CredentialUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Credential.
+     */
+    data: XOR<CredentialUpdateInput, CredentialUncheckedUpdateInput>
+    /**
+     * Choose, which Credential to update.
+     */
+    where: CredentialWhereUniqueInput
+  }
+
+  /**
+   * Credential updateMany
+   */
+  export type CredentialUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Credentials.
+     */
+    data: XOR<CredentialUpdateManyMutationInput, CredentialUncheckedUpdateManyInput>
+    /**
+     * Filter which Credentials to update
+     */
+    where?: CredentialWhereInput
+    /**
+     * Limit how many Credentials to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Credential updateManyAndReturn
+   */
+  export type CredentialUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * The data used to update Credentials.
+     */
+    data: XOR<CredentialUpdateManyMutationInput, CredentialUncheckedUpdateManyInput>
+    /**
+     * Filter which Credentials to update
+     */
+    where?: CredentialWhereInput
+    /**
+     * Limit how many Credentials to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Credential upsert
+   */
+  export type CredentialUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Credential to update in case it exists.
+     */
+    where: CredentialWhereUniqueInput
+    /**
+     * In case the Credential found by the `where` argument doesn't exist, create a new Credential with this data.
+     */
+    create: XOR<CredentialCreateInput, CredentialUncheckedCreateInput>
+    /**
+     * In case the Credential was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CredentialUpdateInput, CredentialUncheckedUpdateInput>
+  }
+
+  /**
+   * Credential delete
+   */
+  export type CredentialDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+    /**
+     * Filter which Credential to delete.
+     */
+    where: CredentialWhereUniqueInput
+  }
+
+  /**
+   * Credential deleteMany
+   */
+  export type CredentialDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Credentials to delete
+     */
+    where?: CredentialWhereInput
+    /**
+     * Limit how many Credentials to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Credential without action
+   */
+  export type CredentialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Credential
+     */
+    select?: CredentialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Credential
+     */
+    omit?: CredentialOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -7084,6 +8168,17 @@ export namespace Prisma {
   };
 
   export type UserBalanceScalarFieldEnum = (typeof UserBalanceScalarFieldEnum)[keyof typeof UserBalanceScalarFieldEnum]
+
+
+  export const CredentialScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    value: 'value',
+    createdAt: 'createdAt'
+  };
+
+  export type CredentialScalarFieldEnum = (typeof CredentialScalarFieldEnum)[keyof typeof CredentialScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -7520,6 +8615,59 @@ export namespace Prisma {
     credits?: IntWithAggregatesFilter<"UserBalance"> | number
   }
 
+  export type CredentialWhereInput = {
+    AND?: CredentialWhereInput | CredentialWhereInput[]
+    OR?: CredentialWhereInput[]
+    NOT?: CredentialWhereInput | CredentialWhereInput[]
+    id?: StringFilter<"Credential"> | string
+    userId?: StringFilter<"Credential"> | string
+    name?: StringFilter<"Credential"> | string
+    value?: StringFilter<"Credential"> | string
+    createdAt?: DateTimeFilter<"Credential"> | Date | string
+  }
+
+  export type CredentialOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CredentialWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_name?: CredentialUserIdNameCompoundUniqueInput
+    AND?: CredentialWhereInput | CredentialWhereInput[]
+    OR?: CredentialWhereInput[]
+    NOT?: CredentialWhereInput | CredentialWhereInput[]
+    userId?: StringFilter<"Credential"> | string
+    name?: StringFilter<"Credential"> | string
+    value?: StringFilter<"Credential"> | string
+    createdAt?: DateTimeFilter<"Credential"> | Date | string
+  }, "id" | "userId_name">
+
+  export type CredentialOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    _count?: CredentialCountOrderByAggregateInput
+    _max?: CredentialMaxOrderByAggregateInput
+    _min?: CredentialMinOrderByAggregateInput
+  }
+
+  export type CredentialScalarWhereWithAggregatesInput = {
+    AND?: CredentialScalarWhereWithAggregatesInput | CredentialScalarWhereWithAggregatesInput[]
+    OR?: CredentialScalarWhereWithAggregatesInput[]
+    NOT?: CredentialScalarWhereWithAggregatesInput | CredentialScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Credential"> | string
+    userId?: StringWithAggregatesFilter<"Credential"> | string
+    name?: StringWithAggregatesFilter<"Credential"> | string
+    value?: StringWithAggregatesFilter<"Credential"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Credential"> | Date | string
+  }
+
   export type WorkflowCreateInput = {
     id?: string
     userId: string
@@ -7940,6 +9088,62 @@ export namespace Prisma {
   export type UserBalanceUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
     credits?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CredentialCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    value: string
+    createdAt?: Date | string
+  }
+
+  export type CredentialUncheckedCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    value: string
+    createdAt?: Date | string
+  }
+
+  export type CredentialUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CredentialUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CredentialCreateManyInput = {
+    id?: string
+    userId: string
+    name: string
+    value: string
+    createdAt?: Date | string
+  }
+
+  export type CredentialUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CredentialUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    value?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -8372,6 +9576,35 @@ export namespace Prisma {
 
   export type UserBalanceSumOrderByAggregateInput = {
     credits?: SortOrder
+  }
+
+  export type CredentialUserIdNameCompoundUniqueInput = {
+    userId: string
+    name: string
+  }
+
+  export type CredentialCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CredentialMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CredentialMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type WorkflowExecutionCreateNestedManyWithoutWorkflowInput = {

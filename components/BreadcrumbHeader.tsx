@@ -6,10 +6,10 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { MobileSidebar } from "./Sidebar";
+
 function BreadcrumbHeader() {
   const pathName = usePathname();
   const paths = pathName === "/" ? [""] : pathName.split("/");
@@ -25,6 +25,9 @@ function BreadcrumbHeader() {
                   {path === "" ? "home" : path}
                 </BreadcrumbLink>
               </BreadcrumbItem>
+              {index !== paths.length - 1 && (
+                <BreadcrumbSeparator className="text-gray-500" />
+              )}
             </React.Fragment>
           ))}
         </BreadcrumbList>
