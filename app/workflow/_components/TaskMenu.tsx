@@ -16,7 +16,13 @@ export default function TaskMenu() {
       <Accordion
         type="multiple"
         className="w-full"
-        defaultValue={["extraction", "interactions", "timing", "results"]}
+        defaultValue={[
+          "extraction",
+          "interactions",
+          "timing",
+          "storage",
+          "results",
+        ]}
       >
         <AccordionItem value="interactions">
           <AccordionTrigger className="font-bold">
@@ -27,7 +33,6 @@ export default function TaskMenu() {
             <TaskMenuBtn taskType={TaskType.CLICK_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
-        
 
         <AccordionItem value="extraction">
           <AccordionTrigger className="font-bold">
@@ -37,6 +42,15 @@ export default function TaskMenu() {
             <TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
             <TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
             <TaskMenuBtn taskType={TaskType.EXTRACT_DATA_WITH_AI} />
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="storage">
+          <AccordionTrigger className="font-bold">
+            Data storage
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.READ_PROPERTY_FROM_JSON} />
           </AccordionContent>
         </AccordionItem>
 
@@ -57,7 +71,6 @@ export default function TaskMenu() {
             <TaskMenuBtn taskType={TaskType.DELIVER_VIA_WEBHOOK} />
           </AccordionContent>
         </AccordionItem>
-
       </Accordion>
     </aside>
   );
@@ -68,13 +81,13 @@ function TaskMenuBtn({ taskType }: { taskType: TaskType }) {
   const onDragStart = (event: React.DragEvent, type: TaskType) => {
     event.dataTransfer.setData("application/reactflow", type);
     event.dataTransfer.effectAllowed = "move";
-  }
+  };
   return (
     <Button
       variant={"secondary"}
       className="flex justify-between items-center gap-2 border w-full"
       draggable={true}
-      onDragStart={event => onDragStart(event, taskType)}
+      onDragStart={(event) => onDragStart(event, taskType)}
     >
       <div className="flex gap-2">
         <task.icon size={20} />
