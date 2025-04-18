@@ -9,7 +9,7 @@ function layout({ children }: { children: React.ReactNode }) {
       {children}
       <Separator />
       <footer className="flex items-center justify-between p-2">
-        <div className="pl-18">
+        <div className="pl-3">
           <Logo iconSize={16} fontSize="text-xl" />
         </div>
         <ModeToggle />
