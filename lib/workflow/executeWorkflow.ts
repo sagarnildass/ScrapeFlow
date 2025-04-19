@@ -187,30 +187,27 @@ async function executeWorkflowPhase(
 
   const creditsRequired = TaskRegistry[node.data.type].credits;
 
-  // First execute the phase
-  const success = await executePhase(phase, node, environment, logCollector);
+  // First deduct credits
+  const creditDeductionSuccess = await decrementCredits(
+    userId,
+    creditsRequired,
+    logCollector
+  );
 
-  // Only deduct credits if the phase execution was successful
-  let creditsConsumed = 0;
-  if (success) {
-    const creditDeductionSuccess = await decrementCredits(
-      userId,
-      creditsRequired,
-      logCollector
+  if (!creditDeductionSuccess) {
+    // If we couldn't deduct credits, mark the phase as failed
+    await finalizePhase(
+      phase.id,
+      false,
+      environment.phases[node.id].outputs,
+      logCollector,
+      0
     );
-    if (!creditDeductionSuccess) {
-      // If we couldn't deduct credits after successful execution, mark the phase as failed
-      await finalizePhase(
-        phase.id,
-        false,
-        environment.phases[node.id].outputs,
-        logCollector,
-        0
-      );
-      return { success: false, creditsConsumed: 0 };
-    }
-    creditsConsumed = creditsRequired;
+    return { success: false, creditsConsumed: 0 };
   }
+
+  // Then execute the phase
+  const success = await executePhase(phase, node, environment, logCollector);
 
   const outputs = environment.phases[node.id].outputs;
 
@@ -219,10 +216,10 @@ async function executeWorkflowPhase(
     success,
     outputs,
     logCollector,
-    creditsConsumed
+    creditsRequired // Always consume credits if deduction was successful
   );
 
-  return { success, creditsConsumed };
+  return { success, creditsConsumed: creditsRequired };
 }
 
 async function finalizePhase(

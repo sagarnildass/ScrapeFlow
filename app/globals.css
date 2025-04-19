@@ -32,6 +32,8 @@
 
   --chart-1: 142 88% 28%;
   --chart-2: 140 74% 44%;
+  --color-success: 142 88% 28%;
+  --color-failed: 0 84% 60%;
 }
 
 .dark {
@@ -59,6 +61,8 @@
 
   --chart-1: 142 88% 28%;
   --chart-2: 140 74% 44%;
+  --color-success: 142 88% 28%;
+  --color-failed: 0 84% 60%;
 }
 
 /* 🧩 Inline theme mappings (optional but useful) */

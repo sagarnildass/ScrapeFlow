@@ -4,7 +4,10 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "../prisma";
 import { Period } from "@/types/analytics";
 import { PeriodToDateRange } from "../helper/dates";
-import { WorkflowExecutionStatus } from "@/types/workflow";
+import {
+  ExecutionPhaseStatus,
+  WorkflowExecutionStatus,
+} from "@/types/workflow";
 import { eachDayOfInterval, format } from "date-fns";
 
 const { COMPLETED, FAILED } = WorkflowExecutionStatus;
@@ -128,6 +131,58 @@ export async function GetWorkflowExecutionStats(period: Period) {
     }
     if (execution.status === FAILED) {
       stats[date].failed++;
+    }
+  });
+
+  const result = Object.entries(stats).map(([date, infos]) => ({
+    date,
+    ...infos,
+  }));
+
+  return result;
+}
+
+export async function GetCreditsUsageInPeriod(period: Period) {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const dateRange = PeriodToDateRange(period);
+
+  const executionPhases = await prisma.executionPhase.findMany({
+    where: {
+      userId,
+      startedAt: { gte: dateRange.startDate, lte: dateRange.endDate },
+      status: {
+        in: [ExecutionPhaseStatus.COMPLETED, ExecutionPhaseStatus.FAILED],
+      },
+    },
+  });
+
+  const dateFormat = "yyyy-MM-dd";
+
+  const stats: Stats = eachDayOfInterval({
+    start: dateRange.startDate,
+    end: dateRange.endDate,
+  })
+    .map((date) => format(date, dateFormat))
+    .reduce((acc, date) => {
+      acc[date] = {
+        success: 0,
+        failed: 0,
+      };
+      return acc;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }, {} as any);
+
+  executionPhases.forEach((phase) => {
+    const date = format(phase.startedAt!, dateFormat);
+    if (phase.status === ExecutionPhaseStatus.COMPLETED) {
+      stats[date].success += phase.creditsConsumed || 0;
+    }
+    if (phase.status === ExecutionPhaseStatus.FAILED) {
+      stats[date].failed += phase.creditsConsumed || 0;
     }
   });
 

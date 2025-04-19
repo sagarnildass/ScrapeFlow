@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { GetWorkflowExecutionStats } from "@/lib/actions/analytics.action";
+import { GetCreditsUsageInPeriod } from "@/lib/actions/analytics.action";
 import {
   Card,
   CardContent,
@@ -17,38 +17,43 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Layers2Icon } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { ChartColumnStackedIcon } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-type ChartData = Awaited<ReturnType<typeof GetWorkflowExecutionStats>>;
+type ChartData = Awaited<ReturnType<typeof GetCreditsUsageInPeriod>>;
 
 const chartConfig = {
   success: {
-    label: "Success",
+    label: "Successful Phases Credits",
     color: "hsl(var(--chart-2))",
   },
   failed: {
-    label: "Failed",
+    label: "Failed Phases Credits",
     color: "hsl(var(--chart-1))",
   },
 };
 
-function ExecutionStatusChart({ data }: { data: ChartData }) {
-  
+function CreditsUsageChart({
+  data,
+  title,
+  description,
+}: {
+  data: ChartData;
+  title: string;
+  description: string;
+}) {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-2xl font-bold flex items-center gap-2">
-          <Layers2Icon className="w-6 h-6 text-primary" />
-          Workflow Execution Status
+          <ChartColumnStackedIcon className="w-6 h-6 text-primary" />
+          {title}
         </CardTitle>
-        <CardDescription>
-          Daily number of succesful and failed workflow executions
-        </CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="max-h-[200px] w-full">
-          <AreaChart
+          <BarChart
             data={data}
             height={200}
             accessibilityLayer
@@ -73,29 +78,27 @@ function ExecutionStatusChart({ data }: { data: ChartData }) {
             <ChartTooltip
               content={<ChartTooltipContent className="w-[250px]" />}
             />
-            <Area
-              min={0}
-              type={"bump"}
-              fillOpacity={0.6}
+            <Bar
+              fillOpacity={0.8}
+              radius={[0, 0, 4, 4]}
               fill={"var(--color-success)"}
               stroke={"var(--color-success)"}
               dataKey={"success"}
               stackId={"a"}
             />
-            <Area
-              min={0}
-              type={"bump"}
-              fillOpacity={0.6}
+            <Bar
+              fillOpacity={0.8}
+              radius={[4, 4, 0, 0]}
               fill={"var(--color-failed)"}
               stroke={"var(--color-failed)"}
               dataKey={"failed"}
               stackId={"a"}
             />
-          </AreaChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
   );
 }
 
-export default ExecutionStatusChart;
+export default CreditsUsageChart;
